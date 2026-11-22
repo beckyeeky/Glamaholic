@@ -1,6 +1,7 @@
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using System;
+using System.IO;
 
 namespace Glamaholic {
     // ReSharper disable once ClassNeverInstantiated.Global
@@ -18,6 +19,7 @@ namespace Glamaholic {
         public Plugin(IDalamudPluginInterface pluginInterface) {
             pluginInterface.Create<Service>();
 
+            TryMigrateLegacyConfig(Service.Interface!.ConfigFile);
             this.Config = Configuration.LoadAndMigrate(Service.Interface!.ConfigFile);
 
             this.Functions = new GameFunctions(this);
@@ -26,6 +28,23 @@ namespace Glamaholic {
 
             Interop.Glamourer.Initialize(Service.Interface);
             Service.Framework.Update += OnFrameworkUpdate;
+        }
+
+        private static void TryMigrateLegacyConfig(FileInfo configFile) {
+            if (configFile.Exists || configFile.DirectoryName == null)
+                return;
+
+            var legacyPath = Path.Combine(configFile.DirectoryName, "Glamaholic.json");
+            if (!File.Exists(legacyPath))
+                return;
+
+            try {
+                File.Copy(legacyPath, configFile.FullName, overwrite: false);
+                configFile.Refresh();
+                Service.Log.Info($"Migrated legacy Glamaholic configuration to {configFile.Name}");
+            } catch (Exception e) {
+                Service.Log.Warning(e, $"Failed to migrate legacy Glamaholic configuration from {legacyPath}");
+            }
         }
 
         private void OnFrameworkUpdate(IFramework framework) {

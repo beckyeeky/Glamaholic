@@ -12,7 +12,7 @@ import time
 from urllib.parse import quote
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_MANIFEST = ROOT / "Glamaholic/bin/Release/Glamaholic/Glamaholic.json"
+DEFAULT_MANIFEST = ROOT / "Glamaholic/bin/Release/GlamaholicCN/GlamaholicCN.json"
 REPOSITORY = "https://github.com/beckyeeky/Glamaholic"
 FIELDS = (
     "Author", "Name", "InternalName", "AssemblyVersion", "Description", "Punchline",
@@ -34,8 +34,8 @@ def generate(manifest, tag, timestamp):
         expected = int if key in INTEGER_FIELDS else bool if key in BOOLEAN_FIELDS else str
         if type(manifest[key]) is not expected:
             raise ValueError(f"manifest 字段 {key} 类型错误，应为 {expected.__name__}")
-    if manifest["InternalName"] != "Glamaholic":
-        raise ValueError("InternalName 必须保持为 Glamaholic")
+    if manifest["InternalName"] != "GlamaholicCN":
+        raise ValueError("InternalName 必须保持为 GlamaholicCN")
     if not re.fullmatch(r"\d+\.\d+\.\d+\.\d+", manifest["AssemblyVersion"]):
         raise ValueError("AssemblyVersion 必须是四段数字版本")
     if not tag or tag.strip() != tag or any(ord(c) < 32 for c in tag):

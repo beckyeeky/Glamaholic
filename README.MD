@@ -1,6 +1,6 @@
-# Glamaholic
+# Glamaholic (GlamaholicCN)
 
-Glamaholic 是用于 FINAL FANTASY XIV 的 Dalamud 幻化模板管理插件。本分支在上游基础上提供中文界面、中文帮助和 Eorzea Collection（EC）国服导入兼容修复，保留原插件标识和数据格式。
+Glamaholic 是用于 FINAL FANTASY XIV 的 Dalamud 幻化模板管理插件。本分支以独立插件标识 `GlamaholicCN` 发布，在上游基础上提供中文界面、中文帮助和 Eorzea Collection（EC）国服导入兼容修复，同时保留原版配置格式并在首次启动时自动迁移已有配置。
 
 ## 功能与适用范围
 
@@ -32,15 +32,13 @@ https://raw.githubusercontent.com/beckyeeky/Glamaholic/main/repo.json
 
 1. 打开 **Dalamud 设置 → 实验性 → 自定义插件库**。
 2. 添加上述链接并保存，然后刷新插件列表。
-3. 查找 `Glamaholic` 并安装。
+3. 查找 `GlamaholicCN` 并安装。
 
-本分支的 `InternalName` 仍为 `Glamaholic`。安装前建议先停用或卸载官方库版本，避免重复加载或更新来源冲突。正常停用或卸载插件时配置会自动保留；不要手动删除配置，切换版本前仍建议备份。
-
-该订阅地址面向 `main` 分支的正式发布。只有维护者已发布对应 tag 的 `latest.zip` 并更新 `main/repo.json` 后，链接才能用于安装；准备索引文件不代表已经发布。本分支不会自动部署到游戏目录。
+本分支使用独立的 `InternalName: GlamaholicCN`，不会被 Dalamud 禁止第三方库覆盖官方插件的安全策略拦截。首次启动时，若尚未生成 `GlamaholicCN.json`，插件会自动从原版 `Glamaholic.json` 只读复制配置（不会修改或删除原文件），完整继承已有幻化板与文件夹。确认迁移无误后，建议停用或卸载官方库版 `Glamaholic`，以免两个插件同时响应 `/glamaholic` 命令或重复显示辅助菜单。
 
 ## 与原版的兼容性
 
-1. **配置文件 100% 通用。** 未修改配置属性名、JSON 序列化字段、`NodeType` 的 `Folder`／`Plate` 值或装备槽位枚举值。原有幻化板名称、文件夹名称和标签不会自动翻译；仅新建默认名称改为中文。
+1. **配置文件格式 100% 通用，且首次启动自动迁移。** 未修改配置属性名、JSON 序列化字段、`NodeType` 的 `Folder`／`Plate` 值或装备槽位枚举值。由于独立标识使用 `GlamaholicCN.json`，首次加载会自动复制原有 `Glamaholic.json`（只读复制，不改动原文件）。原有幻化板名称、文件夹名称和标签不会自动翻译；仅新建默认名称改为中文。
 2. **幻化板 JSON 双向互通。** `SharedPlate.cs` 与分享 JSON 格式保持不变，可在本分支与原版之间导入、导出同一分享字符串。分享 JSON 应通过“分享”按钮取得。
 3. **纯文本导出发生显示变化。** “导出为纯文本”使用中文槽位名称，装备与染剂名称跟随客户端默认语言，未知项提示改为中文。这是供人阅读的文本，不是 JSON 分享格式；依赖英文槽位名称或英文物品名的第三方文本解析器可能需要调整。
 4. **Glamourer IPC 保持互通。** 未修改 IPC 调用、槽位转换或 `Glamourer` 插件识别名；功能要求 Glamourer 已安装、加载且 IPC 可用。
@@ -132,16 +130,16 @@ Windows 使用开发环境配置的 Dalamud 路径；在非默认目录中构建
 
 ## 生成插件库索引与发布
 
-Release 构建产生 `Glamaholic/bin/Release/Glamaholic/Glamaholic.json`。生成工具从该清单读取作者、版本、API 等元数据，输出标准 Dalamud 自定义插件库 JSON 数组；不会修改原作者或插件标识。
+Release 构建产生 `Glamaholic/bin/Release/GlamaholicCN/GlamaholicCN.json`。生成工具从该清单读取作者、版本、API 等元数据，输出标准 Dalamud 自定义插件库 JSON 数组；不会修改原作者或插件标识。
 
 ```sh
 # 默认读取 Release 构建清单，在仓库根目录生成 repo.json。
-python tools/generate_repo.py v1.15.2.1
+python tools/generate_repo.py v1.15.2.2
 
 # 也可显式指定标签、清单和输出路径。
-python tools/generate_repo.py --tag v1.15.2.1 --manifest Glamaholic/bin/Release/Glamaholic/Glamaholic.json --output repo.json
+python tools/generate_repo.py --tag v1.15.2.2 --manifest Glamaholic/bin/Release/GlamaholicCN/GlamaholicCN.json --output repo.json
 ```
 
 `LastUpdate` 默认使用生成时的 Unix 秒级整数时间戳，可用 `--last-update` 显式指定以便复现。三个下载字段均指向 `https://github.com/beckyeeky/Glamaholic/releases/download/{tag}/latest.zip`。
 
-当前仓库中的初始 `repo.json` 用于准备订阅格式。发布前必须先完成真实 Release 构建，再重新运行生成工具，确认 `AssemblyVersion` 为 `1.15.2.1`、原作者为 `Anna, Caitlyn`、API 等字段与构建一致。维护者随后需将构建产物 `latest.zip` 上传到对应 GitHub Release，并将刷新后的 `repo.json` 发布到 `main`。生成工具不上传、不提交、不推送、不部署到游戏目录。
+发布前应先完成真实 Release 构建，再运行生成工具刷新 `repo.json`，确认 `InternalName` 为 `GlamaholicCN`、原作者为 `Anna, Caitlyn`、版本号及 API 等字段与构建一致，随后将构建产物 `latest.zip` 上传到对应 GitHub Release，并将刷新后的 `repo.json` 推送到 `main`。生成工具不上传、不提交、不推送、不部署到游戏目录。

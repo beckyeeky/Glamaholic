@@ -7,6 +7,10 @@ namespace Glamaholic {
         internal record ChangelogEntry(Version Version, string[] Changes);
 
         internal static readonly List<ChangelogEntry> Entries = [
+            new ChangelogEntry(new Version(1, 15, 2, 2), [
+                "将插件标识调整为独立的 GlamaholicCN，避免自定义插件库被 Dalamud 官方库同名安全策略拦截。",
+                "首次启动时若尚无 GlamaholicCN.json，会自动从原有 Glamaholic.json 只读复制配置，完整继承历史幻化板。",
+            ]),
             new ChangelogEntry(new Version(1, 15, 2, 1), [
                 "通过离线英文名称索引修复 Eorzea Collection 国服导入，按本地物品 ID 和装备槽位校验。",
                 "汉化插件界面、帮助、命令说明与更新日志，保留原版配置和分享 JSON 格式。",
