@@ -1,0 +1,32 @@
+{
+  "files": {
+    "Item.csv": {
+      "repository": "xivapi/ffxiv-datamining",
+      "commit": "a9f3a282a0e6070fdc0469b6d4e3e7ea17e16edf",
+      "url": "https://raw.githubusercontent.com/xivapi/ffxiv-datamining/a9f3a282a0e6070fdc0469b6d4e3e7ea17e16edf/csv/en/Item.csv",
+      "sha256": "bea47a186c8d9533808d2436610c866a4dc22590455eca11973a289ffe470dd2"
+    },
+    "Stain.csv": {
+      "repository": "xivapi/ffxiv-datamining",
+      "commit": "a9f3a282a0e6070fdc0469b6d4e3e7ea17e16edf",
+      "url": "https://raw.githubusercontent.com/xivapi/ffxiv-datamining/a9f3a282a0e6070fdc0469b6d4e3e7ea17e16edf/csv/en/Stain.csv",
+      "sha256": "0392c152bba1a3fbdeed89bc3e007e3b9e83d5a5ce618779f1a9439f009400bc"
+    },
+    "EquipSlotCategory.csv": {
+      "repository": "xivapi/ffxiv-datamining",
+      "commit": "a9f3a282a0e6070fdc0469b6d4e3e7ea17e16edf",
+      "url": "https://raw.githubusercontent.com/xivapi/ffxiv-datamining/a9f3a282a0e6070fdc0469b6d4e3e7ea17e16edf/csv/en/EquipSlotCategory.csv",
+      "sha256": "d75f806ef6475ecaaed41204611e4c1de599d95c5e907100ffb52ed6477e505d"
+    },
+    "cn-Item.csv": {
+      "repository": "thewakingsands/ffxiv-datamining-cn",
+      "commit": "ae29be8b21a32329e3356709422427540bf7e364",
+      "url": "https://raw.githubusercontent.com/thewakingsands/ffxiv-datamining-cn/ae29be8b21a32329e3356709422427540bf7e364/Item.csv",
+      "sha256": "56506a0e1e553ce4ce1c87abd743e74a63b09c44adc32d8f7f8b109f4dd4a3d3"
+    }
+  },
+  "artifact": {
+    "path": "Glamaholic/Resources/EcNameIndex.json",
+    "sha256": "3687280f6b1c25aad3506e0f8e178cfad2321b450be17625679fe52c0b17e3cb"
+  }
+}

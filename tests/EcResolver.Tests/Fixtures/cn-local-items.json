@@ -1,0 +1,50 @@
+[
+  {
+    "Id": 33988,
+    "Name": "学究外套",
+    "Slots": [
+      3
+    ],
+    "SoulCrystal": false
+  },
+  {
+    "Id": 11841,
+    "Name": "司天手套",
+    "Slots": [
+      4
+    ],
+    "SoulCrystal": false
+  },
+  {
+    "Id": 32327,
+    "Name": "伊甸之晨治愈裤袜",
+    "Slots": [
+      5
+    ],
+    "SoulCrystal": false
+  },
+  {
+    "Id": 34021,
+    "Name": "促衰长靴",
+    "Slots": [
+      6
+    ],
+    "SoulCrystal": false
+  },
+  {
+    "Id": 37755,
+    "Name": "复兴武士刀",
+    "Slots": [
+      0
+    ],
+    "SoulCrystal": false
+  },
+  {
+    "Id": 41081,
+    "Name": "阿泽玛耳坠",
+    "Slots": [
+      7
+    ],
+    "SoulCrystal": false
+  }
+]

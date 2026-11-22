@@ -29,6 +29,7 @@
 
     <ItemGroup>
         <EmbeddedResource Include="help.txt" />
+        <EmbeddedResource Include="Resources\EcNameIndex.json" LogicalName="Glamaholic.EcNameIndex.json" />
     </ItemGroup>
 
     <ItemGroup>

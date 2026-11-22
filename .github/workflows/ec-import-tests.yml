@@ -1,0 +1,36 @@
+name: EC import regression
+
+on:
+  push:
+    paths:
+      - 'Glamaholic/Interop/**'
+      - 'Glamaholic/Resources/**'
+      - 'Glamaholic/Enums.cs'
+      - 'tests/**'
+      - 'tools/ec-data/**'
+      - '.github/workflows/ec-import-tests.yml'
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate committed database
+        run: python tools/ec-data/generate.py --check
+      - name: Generator regression
+        run: python tools/ec-data/test_data.py -v
+      - name: Reproduce legacy name mismatch
+        run: dotnet run --project tests/EcResolver.Tests/EcResolver.Tests.csproj -- --legacy-repro
+      - name: Test production resolver
+        run: dotnet run --project tests/EcResolver.Tests/EcResolver.Tests.csproj
