@@ -9,7 +9,7 @@ using System.Xml.Linq;
 
 namespace Glamaholic.Ui.Helpers {
     internal class TryOnHelper {
-        private const string PlateName = "Fitting Room";
+        private const string PlateName = "试穿搭配";
 
         // see file footer for information about these offsets
         private const int TryOnToggleOffset = 0x366; // 870
@@ -38,7 +38,7 @@ namespace Glamaholic.Ui.Helpers {
         }
 
         private void DrawDropdown() {
-            if (ImGui.Selectable($"Open {Plugin.Name}")) {
+            if (ImGui.Selectable($"打开 {Plugin.Name}")) {
                 this.Ui.OpenMainInterface();
             }
 
@@ -51,11 +51,11 @@ namespace Glamaholic.Ui.Helpers {
             }
 
             if (Interop.Glamourer.IsAvailable()) {
-                if (ImGui.Selectable("Try on Glamourer")) {
+                if (ImGui.Selectable("通过 Glamourer 试穿")) {
                     this.TryOnGlamourer(false);
                 }
 
-                if (ImGui.Selectable("Try on Glamourer - New Emperor")) {
+                if (ImGui.Selectable("通过 Glamourer 试穿（皇帝的新装）")) {
                     this.TryOnGlamourer(true);
                 }
             }

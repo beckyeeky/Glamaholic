@@ -7,26 +7,31 @@ namespace Glamaholic {
         internal record ChangelogEntry(Version Version, string[] Changes);
 
         internal static readonly List<ChangelogEntry> Entries = [
+            new ChangelogEntry(new Version(1, 15, 2, 1), [
+                "通过离线英文名称索引修复 Eorzea Collection 国服导入，按本地物品 ID 和装备槽位校验。",
+                "汉化插件界面、帮助、命令说明与更新日志，保留原版配置和分享 JSON 格式。",
+                "装备与染剂名称、搜索及染剂统计改为使用客户端默认语言。",
+            ]),
             new ChangelogEntry(new Version(1, 12, 0, 0), [
-                "Folders can now be renamed through the right-click context menu.",
-                "Plates and folders can now be dragged and reordered manually, and automatic sorting has been removed.",
-                "Improved third-party plugin support.",
+                "现在可以通过右键菜单重命名文件夹。",
+                "幻化板和文件夹支持拖动排序，已移除自动排序。",
+                "改进第三方插件支持。",
             ]),
             
             new ChangelogEntry(new Version(1, 13, 0, 0), [
-                "Valuable dyes are now factored into the item selection process when applying plates",
-                "-Previously, the selection process was all or nothing. It will now attempt to find a match with a valuable dye, or an item with any matching dye first",
-                "Dyes on items already in the current plate will no longer be ovewritten and waste a dye",
-                "Plates should now always fully apply and refresh on first try",
+                "应用幻化板时，选择装备会考虑贵重染剂。",
+                "-原先仅匹配全部条件；现在会优先寻找带有匹配贵重染剂或任一匹配染剂的装备。",
+                "不再覆盖当前幻化板装备上已有的相同染色，避免浪费染剂。",
+                "改进幻化板首次应用与刷新，使其能完整生效。",
             ]),
             
             new ChangelogEntry(new Version(1, 14, 0, 0), [
-                "The '(Dye)' suffix is now present in clipboard exports for better interop with other plugins (thanks @SubaruYashiro)",
-                "Added folder selection to plate creation (thanks @firstmagic)",
-                "-'New Plate' button now allows picking a folder to create the plate in",
-                "-Clipboard and EC imports now allow picking a folder to create the plate in",
-                "-TryOn/Examine dropdowns now allow picking a folder to create the plate in",
-                "-You can now move plates into folders via the right-click context menu in the list"
+                "剪贴板导出加入 '(Dye)' 后缀，改善与其他插件的互通（感谢 @SubaruYashiro）。",
+                "创建幻化板时支持选择文件夹（感谢 @firstmagic）。",
+                "-“新建幻化板”按钮支持选择目标文件夹。",
+                "-从剪贴板和 EC 导入时支持选择目标文件夹。",
+                "-试穿和查看装备窗口的下拉菜单支持选择目标文件夹。",
+                "-可以通过列表的右键菜单将幻化板移入文件夹。"
             ]),
         ];
 

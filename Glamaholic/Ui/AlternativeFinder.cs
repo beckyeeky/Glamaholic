@@ -37,7 +37,7 @@ namespace Glamaholic.Ui {
             ImGui.SetNextWindowPos(ImGui.GetMousePos(), ImGuiCond.Appearing);
 
             const ImGuiWindowFlags flags = ImGuiWindowFlags.NoSavedSettings;
-            if (!ImGui.Begin($"Alternative Finder: {this.Item.Name}##{this.Id}", ref this.Visible, flags)) {
+            if (!ImGui.Begin($"同模装备：{this.Item.Name}##{this.Id}", ref this.Visible, flags)) {
                 ImGui.End();
                 return;
             }
@@ -57,8 +57,8 @@ namespace Glamaholic.Ui {
 
             ImGui.NextColumn();
 
-            ImGui.TextUnformatted("Click: link to chat");
-            ImGui.TextUnformatted("Right-click: try on");
+            ImGui.TextUnformatted("左键单击：发送装备链接到聊天");
+            ImGui.TextUnformatted("右键单击：试穿");
 
             ImGui.Columns();
 

@@ -1,8 +1,7 @@
 name: Glamaholic
 author: Anna, Caitlyn
 description: |
-  Create and save as many glamour plates as you want. Activate up to 15 of them
-  at once at the Glamour Dresser. Supports exporting and importing plates for
-  easy sharing.
-punchline: Save and swap your glamour plates.
-repo_url: https://github.com/caitlyn-gg/Glamaholic
+  创建并保存不限数量的幻化模板，在幻化投影台一键启用最多 15 套幻化板。
+  支持导入、导出和分享幻化板，并通过离线名称索引兼容 Eorzea Collection 国服导入。
+punchline: 保存、整理并一键切换幻化模板（中文与国服 EC 导入兼容版）
+repo_url: https://github.com/beckyeeky/Glamaholic

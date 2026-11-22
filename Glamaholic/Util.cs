@@ -32,7 +32,7 @@ namespace Glamaholic {
             return plateOpen && (boxOpen || armoireOpen);
         }
 
-        internal static bool DrawTextInput(string id, ref string input, int max = 512, string message = "Press Enter to save.", ImGuiInputTextFlags flags = ImGuiInputTextFlags.None) {
+        internal static bool DrawTextInput(string id, ref string input, int max = 512, string message = "按 Enter 保存。", ImGuiInputTextFlags flags = ImGuiInputTextFlags.None) {
             ImGui.SetNextItemWidth(-1);
             var ret = ImGui.InputText($"##{id}", ref input, max, ImGuiInputTextFlags.EnterReturnsTrue | flags);
 

@@ -140,14 +140,14 @@ namespace Glamaholic.Ui {
                 return;
             }
 
-            if (ImGui.BeginMenu("Plates")) {
-                if (ImGui.MenuItem("New")) {
-                    var id = this.Ui.Plugin.Config.AddPlate(new SavedPlate("Untitled Plate"));
+            if (ImGui.BeginMenu("幻化板")) {
+                if (ImGui.MenuItem("新建")) {
+                    var id = this.Ui.Plugin.Config.AddPlate(new SavedPlate("未命名幻化板"));
                     this.Ui.Plugin.SaveConfig();
                     this.SwitchPlate(id, true);
                 }
 
-                if (ImGui.BeginMenu("Import from Clipboard")) {
+                if (ImGui.BeginMenu("从剪贴板导入")) {
                     SharedPlate? clipPlate = null;
                     try {
                         clipPlate = JsonConvert.DeserializeObject<SharedPlate>(Util.GetClipboardText());
@@ -156,9 +156,9 @@ namespace Glamaholic.Ui {
                     }
 
                     if (clipPlate == null) {
-                        ImGui.TextDisabled("No valid plate data in clipboard.");
+                        ImGui.TextDisabled("剪贴板中没有有效的幻化板数据。");
                     } else {
-                        if (ImGui.MenuItem("To Root")) {
+                        if (ImGui.MenuItem("导入到根目录")) {
                             var id = this.Ui.Plugin.Config.AddPlate(clipPlate.ToPlate());
                             this.Ui.Plugin.SaveConfig();
                             this.Ui.SwitchPlate(id);
@@ -166,7 +166,7 @@ namespace Glamaholic.Ui {
 
                         var folders = TreeUtils.GetAllFolders(this.Ui.Plugin.Config.Plates);
                         foreach (var (folderId, path) in folders) {
-                            if (ImGui.MenuItem($"To {path}")) {
+                            if (ImGui.MenuItem($"导入到 {path}")) {
                                 var id = this.Ui.Plugin.Config.AddPlate(clipPlate.ToPlate(), folderId);
                                 this.Ui.Plugin.SaveConfig();
                                 this.Ui.SwitchPlate(id);
@@ -182,52 +182,52 @@ namespace Glamaholic.Ui {
 
             if (ImGui.BeginMenu("Eorzea Collection")) {
                 var validUrl = IsValidEorzeaCollectionUrl(Util.GetClipboardText());
-                if (ImGui.BeginMenu("Import from URL", validUrl && !this._ecImporting)) {
-                    if (ImGui.BeginMenu("New Plate")) {
-                        if (ImGui.MenuItem("To Root"))
+                if (ImGui.BeginMenu("从链接导入", validUrl && !this._ecImporting)) {
+                    if (ImGui.BeginMenu("新建幻化板")) {
+                        if (ImGui.MenuItem("导入到根目录"))
                             this.ImportEorzeaCollection(Util.GetClipboardText(), ECImportTarget.NewPlate);
 
                         var folders = TreeUtils.GetAllFolders(this.Ui.Plugin.Config.Plates);
                         foreach (var (folderId, path) in folders) {
-                            if (ImGui.MenuItem($"To {path}"))
+                            if (ImGui.MenuItem($"导入到 {path}"))
                                 this.ImportEorzeaCollection(Util.GetClipboardText(), ECImportTarget.NewPlate, folderId);
                         }
 
                         ImGui.EndMenu();
                     }
 
-                    if (ImGui.MenuItem("Try On"))
+                    if (ImGui.MenuItem("试穿"))
                         this.ImportEorzeaCollection(Util.GetClipboardText(), ECImportTarget.TryOn);
 
-                    if (Interop.Glamourer.IsAvailable() && ImGui.MenuItem("Try On (Glamourer)"))
+                    if (Interop.Glamourer.IsAvailable() && ImGui.MenuItem("试穿（Glamourer）"))
                         this.ImportEorzeaCollection(Util.GetClipboardText(), ECImportTarget.TryOnGlamourer);
 
                     ImGui.EndMenu();
                 }
 
-                if (ImGui.MenuItem("Mass Import")) {
+                if (ImGui.MenuItem("批量导入")) {
                     _massImport = true;
                     _massImportLastURL = Util.GetClipboardText();
-                    _massImportMessage = "Waiting for URL to be copied...";
+                    _massImportMessage = "等待复制链接……";
                 }
 
                 ImGui.EndMenu();
             }
 
             var anyChanged = false;
-            if (ImGui.BeginMenu("Settings")) {
-                anyChanged |= ImGui.MenuItem("Show plate editor menu", "", ref this.Ui.Plugin.Config.ShowEditorMenu);
-                anyChanged |= ImGui.MenuItem("Show examine window menu", "", ref this.Ui.Plugin.Config.ShowExamineMenu);
-                anyChanged |= ImGui.MenuItem("Show try on menu", "", ref this.Ui.Plugin.Config.ShowTryOnMenu);
+            if (ImGui.BeginMenu("设置")) {
+                anyChanged |= ImGui.MenuItem("显示幻化板编辑菜单", "", ref this.Ui.Plugin.Config.ShowEditorMenu);
+                anyChanged |= ImGui.MenuItem("显示查看装备窗口菜单", "", ref this.Ui.Plugin.Config.ShowExamineMenu);
+                anyChanged |= ImGui.MenuItem("显示试穿窗口菜单", "", ref this.Ui.Plugin.Config.ShowTryOnMenu);
                 ImGui.Separator();
-                anyChanged |= ImGui.MenuItem("Show Ko-fi button", "", ref this.Ui.Plugin.Config.ShowKofiButton);
+                anyChanged |= ImGui.MenuItem("显示 Ko-fi 支持按钮", "", ref this.Ui.Plugin.Config.ShowKofiButton);
                 ImGui.Separator();
-                anyChanged |= ImGui.MenuItem("Troubleshooting mode", "", ref this.Ui.Plugin.Config.TroubleshootingMode);
+                anyChanged |= ImGui.MenuItem("故障排查模式", "", ref this.Ui.Plugin.Config.TroubleshootingMode);
 
                 ImGui.EndMenu();
             }
 
-            if (ImGui.BeginMenu("Help")) {
+            if (ImGui.BeginMenu("帮助")) {
                 foreach (var (title, content) in this.Ui.Help) {
                     if (!ImGui.BeginMenu(title)) {
                         continue;
@@ -242,7 +242,7 @@ namespace Glamaholic.Ui {
 
                 ImGui.Separator();
 
-                if (ImGui.MenuItem("View Changelog")) {
+                if (ImGui.MenuItem("查看更新日志")) {
                     this._changelogEntries = Changelog.Entries
                         .OrderByDescending(e => e.Version)
                         .ToList();
@@ -253,7 +253,7 @@ namespace Glamaholic.Ui {
             }
 
             if (this.Ui.Plugin.Config.ShowKofiButton) {
-                const string kofiText = "Support Anna on Ko-fi";
+                const string kofiText = "在 Ko-fi 支持 Anna";
                 var kofiTextSize = ImGui.CalcTextSize(kofiText);
                 ImGui.GetWindowDrawList().AddRectFilled(
                     ImGui.GetCursorScreenPos(),
@@ -300,13 +300,13 @@ namespace Glamaholic.Ui {
 
                 if (import == null) {
                     if (this._massImport)
-                        this._massImportMessage = $"Import failed.. copy a new link to try again";
+                        this._massImportMessage = $"导入失败，请复制新链接重试。";
 
                     return;
                 }
 
                 if (this._massImport)
-                    this._massImportMessage = $"Imported {import.Name}";
+                    this._massImportMessage = $"已导入：{import.Name}";
 
                 switch (target) {
                     case ECImportTarget.NewPlate:
@@ -331,7 +331,7 @@ namespace Glamaholic.Ui {
             }
 
             ImGui.SetNextItemWidth(-1);
-            if (ImGui.InputTextWithHint("##plate-filter", "Search...", ref this._plateFilter, 512, ImGuiInputTextFlags.AutoSelectAll)) {
+            if (ImGui.InputTextWithHint("##plate-filter", "搜索……", ref this._plateFilter, 512, ImGuiInputTextFlags.AutoSelectAll)) {
                 this.PlateFilter = this._plateFilter.Length == 0
                     ? null
                     : new FilterInfo(Service.DataManager, this._plateFilter);
@@ -372,7 +372,7 @@ namespace Glamaholic.Ui {
                                 unsafe {
                                     ImGui.SetDragDropPayload("TREE_NODE", null, 0);
                                 }
-                                ImGui.Text($"Moving '{leaf.Name}'");
+                                ImGui.Text($"正在移动「{leaf.Name}」");
                                 ImGui.EndDragDropSource();
                             }
 
@@ -406,7 +406,7 @@ namespace Glamaholic.Ui {
 
                             // Right-click context menu for plate node
                             if (ImGui.BeginPopupContextItem($"plate-node-context-{node.Id}")) {
-                                if (ImGui.BeginMenu("Move to Folder")) {
+                                if (ImGui.BeginMenu("移动到文件夹")) {
                                     var selected = Helpers.HelperUtil.DrawFolderMenuItems(this.Ui.Plugin.Config.Plates);
                                     if (selected.HasValue) {
                                         TreeUtils.MoveNodeToFolder(this.Ui.Plugin.Config.Plates, node.Id,
@@ -419,7 +419,7 @@ namespace Glamaholic.Ui {
 
                                 ImGui.Separator();
 
-                                if (ImGui.MenuItem("Delete")) {
+                                if (ImGui.MenuItem("删除")) {
                                     _contextMenuNodeId = node.Id;
                                     _confirmDeleteNode = true;
                                 }
@@ -431,8 +431,8 @@ namespace Glamaholic.Ui {
                             }
 
                             if (ImGui.BeginPopup($"confirm-delete-plate-{node.Id}")) {
-                                ImGui.TextUnformatted("Delete this plate? This cannot be undone.");
-                                if (ImGui.Button("Delete")) {
+                                ImGui.TextUnformatted("确定删除此幻化板？此操作无法撤销。");
+                                if (ImGui.Button("删除")) {
                                     deferredActions.Add((node.Id, null));
                                     _confirmDeleteNode = false;
                                     _contextMenuNodeId = null;
@@ -441,7 +441,7 @@ namespace Glamaholic.Ui {
 
                                 ImGui.SameLine();
 
-                                if (ImGui.Button("Cancel")) {
+                                if (ImGui.Button("取消")) {
                                     _confirmDeleteNode = false;
                                     _contextMenuNodeId = null;
                                     ImGui.CloseCurrentPopup();
@@ -464,7 +464,7 @@ namespace Glamaholic.Ui {
                                 unsafe {
                                     ImGui.SetDragDropPayload("TREE_NODE", null, 0);
                                 }
-                                ImGui.Text($"Moving folder '{folder.Name}'");
+                                ImGui.Text($"正在移动文件夹「{folder.Name}」");
                                 ImGui.EndDragDropSource();
                             }
 
@@ -507,7 +507,7 @@ namespace Glamaholic.Ui {
 
                             // Right-click context menu for folder node
                             if (ImGui.BeginPopupContextItem($"folder-node-context-{node.Id}")) {
-                                if (ImGui.MenuItem("Rename")) {
+                                if (ImGui.MenuItem("重命名")) {
                                     _contextMenuNodeId = node.Id;
                                     _showFolderRename = true;
                                     _folderRenameInput = folder.Name;
@@ -515,13 +515,13 @@ namespace Glamaholic.Ui {
 
                                 ImGui.Separator();
 
-                                if (ImGui.MenuItem("Delete Folder (and all contents)")) {
+                                if (ImGui.MenuItem("删除文件夹及全部内容")) {
                                     _contextMenuNodeId = node.Id;
                                     _pendingFolderAction = 0;
                                     _confirmDeleteFolder = true;
                                 }
 
-                                if (ImGui.MenuItem("Delete Folder (move contents out)")) {
+                                if (ImGui.MenuItem("删除文件夹并移出内容")) {
                                     _contextMenuNodeId = node.Id;
                                     _pendingFolderAction = 1;
                                     _confirmDeleteFolder = true;
@@ -536,12 +536,12 @@ namespace Glamaholic.Ui {
 
                             if (ImGui.BeginPopup($"confirm-delete-folder-{node.Id}")) {
                                 if (_pendingFolderAction == 0) {
-                                    ImGui.TextUnformatted("Delete this folder and ALL its contents? This cannot be undone.");
+                                    ImGui.TextUnformatted("确定删除此文件夹及其全部内容？此操作无法撤销。");
                                 } else {
-                                    ImGui.TextUnformatted("Delete this folder and move all contents out?");
+                                    ImGui.TextUnformatted("确定删除此文件夹并将全部内容移出？");
                                 }
 
-                                if (ImGui.Button("Delete")) {
+                                if (ImGui.Button("删除")) {
                                     deferredActions.Add((node.Id, _pendingFolderAction));
                                     _confirmDeleteFolder = false;
                                     _contextMenuNodeId = null;
@@ -551,7 +551,7 @@ namespace Glamaholic.Ui {
 
                                 ImGui.SameLine();
 
-                                if (ImGui.Button("Cancel")) {
+                                if (ImGui.Button("取消")) {
                                     _confirmDeleteFolder = false;
                                     _contextMenuNodeId = null;
                                     _pendingFolderAction = null;
@@ -567,7 +567,7 @@ namespace Glamaholic.Ui {
                             }
 
                             if (ImGui.BeginPopup($"rename-folder-{node.Id}")) {
-                                ImGui.TextUnformatted("Rename Folder:");
+                                ImGui.TextUnformatted("重命名文件夹：");
                                 ImGui.SetNextItemWidth(250);
 
                                 if (ImGui.IsWindowAppearing()) {
@@ -576,7 +576,7 @@ namespace Glamaholic.Ui {
 
                                 ImGui.InputText("##folder-rename-input", ref _folderRenameInput, 128);
 
-                                if (ImGui.Button("Rename") && !string.IsNullOrWhiteSpace(_folderRenameInput)) {
+                                if (ImGui.Button("重命名") && !string.IsNullOrWhiteSpace(_folderRenameInput)) {
                                     folder.Name = _folderRenameInput.Trim();
                                     this.Ui.Plugin.SaveConfig();
                                     _showFolderRename = false;
@@ -586,7 +586,7 @@ namespace Glamaholic.Ui {
 
                                 ImGui.SameLine();
 
-                                if (ImGui.Button("Cancel")) {
+                                if (ImGui.Button("取消")) {
                                     _showFolderRename = false;
                                     _contextMenuNodeId = null;
                                     ImGui.CloseCurrentPopup();
@@ -675,13 +675,13 @@ namespace Glamaholic.Ui {
             ImGui.Dummy(new Vector2(0, 1));
 
             ImGui.PushItemWidth(-1);
-            if (Util.IconButton(FontAwesomeIcon.Plus, tooltip: "New Plate")) {
+            if (Util.IconButton(FontAwesomeIcon.Plus, tooltip: "新建幻化板")) {
                 ImGui.OpenPopup("new-plate-folder-popup");
                 _newPlateTargetFolder = null;
             }
 
             ImGui.SameLine();
-            if (Util.IconButton(FontAwesomeIcon.FolderPlus, tooltip: "New Folder")) {
+            if (Util.IconButton(FontAwesomeIcon.FolderPlus, tooltip: "新建文件夹")) {
                 ImGui.OpenPopup("new-folder-popup");
                 _newFolderNameInput = string.Empty;
             }
@@ -696,7 +696,7 @@ namespace Glamaholic.Ui {
             ImGui.PopItemWidth();
 
             if (ImGui.BeginPopup("new-folder-popup")) {
-                ImGui.TextUnformatted("Folder Name:");
+                ImGui.TextUnformatted("文件夹名称：");
                 ImGui.SetNextItemWidth(-1);
 
                 // Caitlyn: Dalamud API 14 broke EnterReturnsTrue. Once that's fixed, this should be restored.
@@ -713,7 +713,7 @@ namespace Glamaholic.Ui {
 
                 ImGui.InputText("##new-folder-name", ref _newFolderNameInput, 128);
 
-                if (ImGui.Button("Create") && !string.IsNullOrWhiteSpace(_newFolderNameInput)) {
+                if (ImGui.Button("创建") && !string.IsNullOrWhiteSpace(_newFolderNameInput)) {
                     this.Ui.Plugin.Config.Plates.Insert(0, new FolderNode {
                         Name = _newFolderNameInput.Trim(),
                         Children = new List<TreeNode>()
@@ -724,7 +724,7 @@ namespace Glamaholic.Ui {
 
                 ImGui.SameLine();
 
-                if (ImGui.Button("Cancel")) {
+                if (ImGui.Button("取消")) {
                     ImGui.CloseCurrentPopup();
                 }
 
@@ -732,17 +732,17 @@ namespace Glamaholic.Ui {
             }
 
             if (ImGui.BeginPopup("new-plate-folder-popup")) {
-                ImGui.TextUnformatted("Folder:");
+                ImGui.TextUnformatted("文件夹：");
                 ImGui.SetNextItemWidth(200);
                 var folderChoice = Helpers.HelperUtil.DrawFolderCombo(
                     this.Ui.Plugin.Config.Plates, _newPlateTargetFolder, "##new-plate-folder");
                 if (folderChoice.HasValue)
                     _newPlateTargetFolder = folderChoice.Value;
 
-                if (ImGui.Button("Create")) {
+                if (ImGui.Button("创建")) {
                     Guid? target = (_newPlateTargetFolder.HasValue && _newPlateTargetFolder.Value != Guid.Empty)
                         ? _newPlateTargetFolder : null;
-                    var id = this.Ui.Plugin.Config.AddPlate(new SavedPlate("Untitled Plate"), target);
+                    var id = this.Ui.Plugin.Config.AddPlate(new SavedPlate("未命名幻化板"), target);
                     this.Ui.Plugin.SaveConfig();
                     this.SwitchPlate(id, true);
                     ImGui.CloseCurrentPopup();
@@ -750,7 +750,7 @@ namespace Glamaholic.Ui {
 
                 ImGui.SameLine();
 
-                if (ImGui.Button("Cancel")) {
+                if (ImGui.Button("取消")) {
                     ImGui.CloseCurrentPopup();
                 }
 
@@ -773,11 +773,11 @@ namespace Glamaholic.Ui {
                 ImGui.SetKeyboardFocusHere(-1);
             }
 
-            ImGui.TextUnformatted("Primary Dye");
+            ImGui.TextUnformatted("染色通道 1");
             ImGui.NewLine();
 
             if (ImGui.BeginChild("dye 1 picker", new Vector2(250, 350), false, ImGuiWindowFlags.HorizontalScrollbar)) {
-                if (ImGui.Selectable("None", mirage.Stain1 == 0)) {
+                if (ImGui.Selectable("无", mirage.Stain1 == 0)) {
                     mirage.Stain1 = 0;
                     ImGui.CloseCurrentPopup();
                 }
@@ -807,11 +807,11 @@ namespace Glamaholic.Ui {
                 ImGui.Separator();
                 ImGui.NewLine();
 
-                ImGui.TextUnformatted("Secondary Dye");
+                ImGui.TextUnformatted("染色通道 2");
                 ImGui.NewLine();
 
                 if (ImGui.BeginChild("dye 2 picker", new Vector2(250, 350), false, ImGuiWindowFlags.HorizontalScrollbar)) {
-                    if (ImGui.Selectable("None", mirage.Stain2 == 0)) {
+                    if (ImGui.Selectable("无", mirage.Stain2 == 0)) {
                         mirage.Stain2 = 0;
                         ImGui.CloseCurrentPopup();
                     }
@@ -846,7 +846,7 @@ namespace Glamaholic.Ui {
             }
 
             ImGui.SetNextItemWidth(-1);
-            if (ImGui.InputTextWithHint("##item-filter", "Search...", ref this._itemFilter, 512, ImGuiInputTextFlags.AutoSelectAll)) {
+            if (ImGui.InputTextWithHint("##item-filter", "搜索……", ref this._itemFilter, 512, ImGuiInputTextFlags.AutoSelectAll)) {
                 this.FilterItems(slot);
             }
 
@@ -855,7 +855,7 @@ namespace Glamaholic.Ui {
             }
 
             if (GameFunctions.DresserContents.Count > 0) {
-                if (ImGui.Checkbox("Only show items in the armoire/dresser", ref this.Ui.Plugin.Config.ItemFilterShowObtainedOnly)) {
+                if (ImGui.Checkbox("仅显示收藏柜或幻化投影台中的装备", ref this.Ui.Plugin.Config.ItemFilterShowObtainedOnly)) {
                     this.Ui.Plugin.SaveConfig();
                     this.FilterItems(slot);
                 }
@@ -879,7 +879,7 @@ namespace Glamaholic.Ui {
                 ImGui.SameLine();
                 Util.TextIcon(FontAwesomeIcon.Box);
                 ImGui.SameLine();
-                ImGui.TextUnformatted("None (keep existing)");
+                ImGui.TextUnformatted("不指定（保留原有装备）");
 
                 if (ImGui.Selectable("##none-remove)", id == 0)) {
                     plate.Items[slot] = new SavedGlamourItem();
@@ -889,7 +889,7 @@ namespace Glamaholic.Ui {
                 ImGui.SameLine();
                 Util.TextIcon(FontAwesomeIcon.Box);
                 ImGui.SameLine();
-                ImGui.TextUnformatted("None (remove existing)");
+                ImGui.TextUnformatted("清空（移除原有装备）");
 
                 var clipper = ImGui.ImGuiListClipper();
 
@@ -989,7 +989,7 @@ namespace Glamaholic.Ui {
                             } else
                                 tooltip += $"\n(?)";
                         } else {
-                            tooltip += $"\n(no primary dye)";
+                            tooltip += $"\n（通道 1 未染色）";
 
                             if (item.DyeCount != 0)
                                 ImGui.GetWindowDrawList().AddCircle(circleCentre, 5, 0xFF000000);
@@ -1013,7 +1013,7 @@ namespace Glamaholic.Ui {
                                 ImGui.GetWindowDrawList().AddCircle(circleCentre, 5, 0xFF000000);
                         }
 
-                        tooltip += "\n\n* Left click to copy name to clipboard";
+                        tooltip += "\n\n* 左键单击可将名称复制到剪贴板";
                     }
                 }
             } else if (mirage != null) {
@@ -1046,7 +1046,7 @@ namespace Glamaholic.Ui {
                 if (Service.DataManager.GetExcelSheet<Item>()!.TryGetRow(mirage!.ItemId, out var item)) {
                     string name = item.Name.ExtractText();
                     ImGui.SetClipboardText(name);
-                    Service.ChatGui.Print($"Copied '{name}' to clipboard.");
+                    Service.ChatGui.Print($"已将「{name}」复制到剪贴板。");
                 }
             }
 
@@ -1104,46 +1104,46 @@ namespace Glamaholic.Ui {
             }
 
             ImGui.TableNextColumn();
-            if (Util.IconButton(FontAwesomeIcon.Check, tooltip: "Apply")) {
+            if (Util.IconButton(FontAwesomeIcon.Check, tooltip: "应用")) {
                 if (!Util.IsEditingPlate(Service.GameGui)) {
-                    this.AddTimedMessage("The in-game plate editor must be open.");
+                    this.AddTimedMessage("请先在幻化投影台打开游戏内幻化板编辑窗口。");
                 } else {
                     Service.Framework.RunOnFrameworkThread(() => this.Ui.Plugin.Functions.LoadPlate(plate));
                 }
             }
 
             ImGui.TableNextColumn();
-            if (Util.IconButton(FontAwesomeIcon.Search, tooltip: "Try on")) {
+            if (Util.IconButton(FontAwesomeIcon.Search, tooltip: "试穿")) {
                 this.Ui.TryOnHelper.TryOnPlate(plate);
             }
 
             ImGui.TableNextColumn();
-            if (Util.IconButton(FontAwesomeIcon.Font, tooltip: "Rename")) {
+            if (Util.IconButton(FontAwesomeIcon.Font, tooltip: "重命名")) {
                 this._showRename ^= true;
                 this._renameInput = plate.Name;
             }
 
             ImGui.TableNextColumn();
-            if (Util.IconButton(FontAwesomeIcon.PencilAlt, tooltip: "Edit")) {
+            if (Util.IconButton(FontAwesomeIcon.PencilAlt, tooltip: "编辑")) {
                 this._editing = true;
                 this._editingPlate = plate.Clone();
                 this._editingPlateId = node.Id;
             }
 
             ImGui.TableNextColumn();
-            if (Util.IconButton(FontAwesomeIcon.ShareAltSquare, tooltip: "Share")) {
+            if (Util.IconButton(FontAwesomeIcon.ShareAltSquare, tooltip: "分享")) {
                 ImGui.SetClipboardText(JsonConvert.SerializeObject(new SharedPlate(plate)));
-                this.AddTimedMessage("Copied to clipboard.");
+                this.AddTimedMessage("已复制到剪贴板。");
             }
 
             ImGui.TableNextColumn();
-            if (Util.IconButton(FontAwesomeIcon.FileExport, tooltip: "Export as Text")) {
+            if (Util.IconButton(FontAwesomeIcon.FileExport, tooltip: "导出为纯文本")) {
                 ImGui.SetClipboardText(ConvertToText(plate));
-                this.AddTimedMessage("Copied to clipboard.");
+                this.AddTimedMessage("已复制到剪贴板。");
             }
 
             ImGui.TableNextColumn();
-            if (Util.IconButton(FontAwesomeIcon.FolderOpen, tooltip: "Move to Folder")) {
+            if (Util.IconButton(FontAwesomeIcon.FolderOpen, tooltip: "移动到文件夹")) {
                 ImGui.OpenPopup("move-to-folder-popup");
             }
 
@@ -1166,12 +1166,12 @@ namespace Glamaholic.Ui {
                 return;
             }
 
-            if (!ImGui.CollapsingHeader($"Tags ({plate.Tags.Count})###plate-tags")) {
+            if (!ImGui.CollapsingHeader($"标签（{plate.Tags.Count}）###plate-tags")) {
                 return;
             }
 
             ImGui.SetNextItemWidth(-1);
-            if (ImGui.InputTextWithHint("##tag-input", "Input a tag and press Enter", ref this._tagInput, 128, ImGuiInputTextFlags.EnterReturnsTrue)) {
+            if (ImGui.InputTextWithHint("##tag-input", "输入标签后按 Enter", ref this._tagInput, 128, ImGuiInputTextFlags.EnterReturnsTrue)) {
                 if (!string.IsNullOrWhiteSpace(this._tagInput)) {
                     var tag = this._tagInput.Trim();
 
@@ -1260,9 +1260,9 @@ namespace Glamaholic.Ui {
             }
 
             if (this._editing) {
-                Util.TextUnformattedWrapped("Click an item to edit it. Right-click to dye.");
+                Util.TextUnformattedWrapped("单击装备进行编辑，右键单击进行染色。");
 
-                if (ImGui.Button("Save") && this._editingPlate != null) {
+                if (ImGui.Button("保存") && this._editingPlate != null) {
                     selectedNode.Plate = _editingPlate.Clone();
 
                     TreeUtils.Sort(this.Ui.Plugin.Config.Plates);
@@ -1272,7 +1272,7 @@ namespace Glamaholic.Ui {
 
                 ImGui.SameLine();
 
-                if (ImGui.Button("Cancel")) {
+                if (ImGui.Button("取消")) {
                     this.ResetEditing();
                 }
             }
@@ -1297,11 +1297,11 @@ namespace Glamaholic.Ui {
             DrawDyeListLabel(plate);
 
             ImGui.NewLine();
-            ImGui.TextUnformatted("Customize");
+            ImGui.TextUnformatted("自定义");
 
-            bool fillSlots = ImGui.Button("Fill Empty Slots with New Emperor");
+            bool fillSlots = ImGui.Button("用皇帝的新装填充空槽位");
             if (ImGui.IsItemHovered())
-                ImGui.SetTooltip("Fills empty slots with the New Emperor set.");
+                ImGui.SetTooltip("使用皇帝的新装系列装备填充空槽位。");
 
             if (fillSlots)
                 this.FillEmptySlots(plate);
@@ -1311,27 +1311,27 @@ namespace Glamaholic.Ui {
                 ImGui.TextUnformatted("Glamourer");
                 SeparatorHack();
 
-                if (ImGui.Button("Try On") && Service.ObjectTable.LocalPlayer != null)
+                if (ImGui.Button("试穿") && Service.ObjectTable.LocalPlayer != null)
                     Interop.Glamourer.TryOn(Service.ObjectTable.LocalPlayer!.ObjectIndex, plate);
 
                 ImGui.SameLine();
 
-                if (ImGui.Button("Revert") && Service.ObjectTable.LocalPlayer != null)
+                if (ImGui.Button("还原") && Service.ObjectTable.LocalPlayer != null)
                     Interop.Glamourer.RevertState(Service.ObjectTable.LocalPlayer!.ObjectIndex);
             }
 
             ImGui.NewLine();
-            ImGui.TextUnformatted("Settings");
+            ImGui.TextUnformatted("设置");
             SeparatorHack();
 
             bool newEmperor = plate.FillWithNewEmperor;
-            if (ImGui.Checkbox("Fill empty slots with New Emperor for Try on & Apply", ref newEmperor)) {
+            if (ImGui.Checkbox("试穿或应用时用皇帝的新装填充空槽位", ref newEmperor)) {
                 plate.FillWithNewEmperor = newEmperor;
                 this.Ui.Plugin.SaveConfig();
             }
 
             if (ImGui.IsItemHovered())
-                ImGui.SetTooltip("Does not modify the glamour itself!\n\nIf enabled, empty slots will be filled with the New Emperor set when tried on or applied to plates.");
+                ImGui.SetTooltip("不会修改保存的幻化模板！\n\n启用后，试穿或应用幻化板时，会使用皇帝的新装系列装备填充空槽位。");
         }
 
         private void DrawDyeListLabel(SavedPlate plate) {
@@ -1343,7 +1343,7 @@ namespace Glamaholic.Ui {
 
             ImGui.SameLine();
 
-            ImGui.TextUnformatted("Hover to view dyes (click to copy)");
+            ImGui.TextUnformatted("悬停查看染剂用量（单击复制）");
             showDyes |= ImGui.IsItemHovered();
             copyDyes |= ImGui.IsItemClicked(ImGuiMouseButton.Left);
 
@@ -1388,7 +1388,7 @@ namespace Glamaholic.Ui {
 
                 if (copyDyes || DateTime.Now.Subtract(_dyesCopiedTime).TotalSeconds < 1.5) {
                     ImGui.NewLine();
-                    ImGui.TextUnformatted("Copied to clipboard!");
+                    ImGui.TextUnformatted("已复制到剪贴板！");
                 }
 
                 ImGui.EndTooltip();
@@ -1404,11 +1404,11 @@ namespace Glamaholic.Ui {
             var warnings = new List<string>();
 
             if (!this.Ui.Plugin.Functions.ArmoireLoaded) {
-                warnings.Add("The Armoire is not loaded. Open it once to enable glamours from the Armoire.");
+                warnings.Add("尚未加载收藏柜。请先打开一次收藏柜，才能使用其中的装备进行幻化。");
             }
 
             if (GameFunctions.DresserContents.Count == 0) {
-                warnings.Add("Glamour Dresser is empty or has not been opened. Glamaholic will not know which items you have.");
+                warnings.Add("幻化投影台为空或尚未打开，Glamaholic 无法判断已收录哪些装备。");
             }
 
             if (warnings.Count == 0) {
@@ -1416,7 +1416,7 @@ namespace Glamaholic.Ui {
             }
 
             ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudYellow);
-            var header = ImGui.CollapsingHeader($"Warnings ({warnings.Count})###warnings");
+            var header = ImGui.CollapsingHeader($"提示（{warnings.Count}）###warnings");
             ImGui.PopStyleColor();
 
             if (!header) {
@@ -1452,27 +1452,27 @@ namespace Glamaholic.Ui {
             ImGui.SetNextWindowPos(windowPos, ImGuiCond.Appearing);
             ImGui.SetNextWindowSize(windowSize, ImGuiCond.Appearing);
 
-            if (!ImGui.Begin("Mass Import", ref this._massImport)) {
+            if (!ImGui.Begin("批量导入###Mass Import", ref this._massImport)) {
                 ImGui.End();
                 return;
             }
 
-            ImGui.TextUnformatted("Eorzea Collection Mass Import");
+            ImGui.TextUnformatted("Eorzea Collection 批量导入");
             ImGui.Separator();
 
             {
-                ImGui.TextUnformatted("Target:");
-                ImGui.RadioButton("New Plate", ref this._massImportTarget, 0); ImGui.SameLine();
-                ImGui.RadioButton("Try On", ref this._massImportTarget, 1);
+                ImGui.TextUnformatted("导入用途：");
+                ImGui.RadioButton("新建幻化板", ref this._massImportTarget, 0); ImGui.SameLine();
+                ImGui.RadioButton("试穿", ref this._massImportTarget, 1);
 
                 if (Interop.Glamourer.IsAvailable()) {
                     ImGui.SameLine();
-                    ImGui.RadioButton("Try On (Glamourer)", ref this._massImportTarget, 2);
+                    ImGui.RadioButton("试穿（Glamourer）", ref this._massImportTarget, 2);
 
                     if (this._massImportTarget == 2) {
                         ImGui.Separator();
 
-                        if (ImGui.Button("Revert Glamourer")) {
+                        if (ImGui.Button("还原 Glamourer 外观")) {
                             if (Service.ObjectTable.LocalPlayer != null)
                                 Interop.Glamourer.RevertState(Service.ObjectTable.LocalPlayer.ObjectIndex);
                         }
@@ -1486,22 +1486,22 @@ namespace Glamaholic.Ui {
                 var clipboard = Util.GetClipboardText().Trim();
                 if (clipboard != _massImportLastURL && IsValidEorzeaCollectionUrl(clipboard)) {
                     _massImportLastURL = clipboard;
-                    _massImportMessage = "Importing...";
+                    _massImportMessage = "正在导入……";
                     ImportEorzeaCollection(clipboard, target);
                 }
             }
 
             ImGui.NewLine();
-            ImGui.TextUnformatted("Copy an Eorzea Collection URL to import it.");
+            ImGui.TextUnformatted("复制 Eorzea Collection 幻化链接即可导入。");
 
             ImGui.NewLine();
             if (this._ecImporting)
-                ImGui.TextUnformatted("Importing...");
+                ImGui.TextUnformatted("正在导入……");
             else
                 ImGui.TextUnformatted(_massImportMessage);
 
             ImGui.SetCursorPosY(ImGui.GetWindowHeight() - ImGui.GetFrameHeightWithSpacing() - ImGui.GetStyle().ItemSpacing.Y);
-            if (ImGui.Button("Close")) {
+            if (ImGui.Button("关闭")) {
                 this._massImport = false;
             }
 
@@ -1593,10 +1593,10 @@ namespace Glamaholic.Ui {
                 if (kvp.Value.ItemId == 0) {
                     continue;
                 } else {
-                    sb.Append(kvp.Key.ToString()).Append(": ");
+                    sb.Append(kvp.Key.Name()).Append(": ");
 
                     if (!DataCache.EquippableItems.Value.TryGetFirst(i => i.RowId == kvp.Value.ItemId, out Item item)) {
-                        sb.AppendLine("Unknown Item");
+                        sb.AppendLine("未知装备");
                     } else {
                         sb.Append(item.Name);
 
@@ -1609,7 +1609,7 @@ namespace Glamaholic.Ui {
                         sb.Append(" (");
                         if (kvp.Value.Stain1 != 0) {
                             if (!stainSheet.TryGetRow(kvp.Value.Stain1, out var stain)) {
-                                sb.Append("Unknown Stain");
+                                sb.Append("未知染剂");
                             } else {
                                 sb.Append(stain.Name);
                             }
@@ -1621,7 +1621,7 @@ namespace Glamaholic.Ui {
                                 sb.Append(", ");
 
                             if (!stainSheet.TryGetRow(kvp.Value.Stain2, out var stain)) {
-                                sb.Append("Unknown Stain");
+                                sb.Append("未知染剂");
                             } else {
                                 sb.Append(stain.Name);
                             }
@@ -1674,15 +1674,15 @@ namespace Glamaholic.Ui {
             ImGui.SetNextWindowPos(windowPos, ImGuiCond.Appearing);
             ImGui.SetNextWindowSize(windowSize, ImGuiCond.Appearing);
 
-            if (!ImGui.Begin("What's New in Glamaholic", ref this._showChangelog, ImGuiWindowFlags.NoCollapse)) {
+            if (!ImGui.Begin("Glamaholic 更新日志###What's New in Glamaholic", ref this._showChangelog, ImGuiWindowFlags.NoCollapse)) {
                 ImGui.End();
                 return;
             }
 
             if (this._changelogEntries == null || this._changelogEntries.Count == 0) {
-                ImGui.TextUnformatted("No new changes.");
+                ImGui.TextUnformatted("暂无新的更新内容。");
             } else {
-                ImGui.TextUnformatted("Recent changes since you last opened Glamaholic");
+                ImGui.TextUnformatted("自上次打开 Glamaholic 以来的更新");
                 ImGui.Separator();
                 ImGui.NewLine();
 
@@ -1690,7 +1690,7 @@ namespace Glamaholic.Ui {
                 if (ImGui.BeginChild("changelog-content", new Vector2(0, -footerHeight), false)) {
                     foreach (var entry in this._changelogEntries) {
                         ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudOrange);
-                        ImGui.TextUnformatted($"Version {entry.Version}");
+                        ImGui.TextUnformatted($"版本 {entry.Version}");
                         ImGui.PopStyleColor();
 
                         foreach (var change in entry.Changes) {
@@ -1715,7 +1715,7 @@ namespace Glamaholic.Ui {
             }
 
             ImGui.Separator();
-            if (ImGui.Button("Close")) {
+            if (ImGui.Button("关闭")) {
                 this.CloseChangelog();
             }
 

@@ -1,53 +1,51 @@
-# How to use Glamaholic
+# Glamaholic 使用说明
 
-Thank you for installing Glamaholic! This plugin can act as your home for
-glamours, since you can store as many as you would like in it. To get started,
-try reading the section called "Adding glamour plates". Keep in mind that you'll
-need to be editing your plates at the Glamour Dresser to be able to copy those
-plates into the plugin or apply new plates.
+Glamaholic 用于保存和整理幻化模板，保存数量不受游戏内幻化板数量限制。
+初次使用可先阅读“添加与导入幻化板”。
+从游戏内复制幻化板或将模板应用到游戏前，需先在幻化投影台打开幻化板编辑窗口。
 
 ---
 
-# Adding glamour plates
+# 添加与导入幻化板
 
-- From the main Glamaholic window, click "Plates" and then "New" to create an
-empty glamour plate to edit from scratch.
+- 在 Glamaholic 主窗口选择“幻化板”→“新建”，创建空白幻化板后自行编辑。
+也可使用列表底部的“新建幻化板”按钮，选择目标文件夹后创建。
 
-- From the main Glamaholic window, click "Plates", hover over "Import", paste
-a shared plate, then press Enter to import a shared plate.
+- 复制他人分享的幻化板 JSON，在“幻化板”→“从剪贴板导入”中选择根目录或目标文件夹。
 
-- Click on the Glamaholic menu at the top left of the Glamour Plate Creation
-window, then hover over "Create glamour plate" to import plates from the game.
+- 在游戏内幻化板编辑窗口左上角打开 Glamaholic 菜单，选择“创建幻化板”，
+选择文件夹并输入名称后按 Enter，即可保存当前搭配。按住 Control 并单击已有幻化板可覆盖它。
 
-- Open the Examine window a character, click the "Glamaholic" menu, then click
-"Create glamour plate" to create a glamour plate from someone else's outfit.
+- 在角色的“查看装备”窗口或“试穿”窗口打开 Glamaholic 菜单，
+选择“创建幻化板”，即可保存对应搭配。
 
----
-
-# Finding items that share a model
-
-You can search for items that share the same model as another item by either
-middle-clicking (click with mouse wheel) or holding Control and left-clicking on 
-any item name or item icon. This will open a window listing items with the same
-model where you can link or try them on.
+- 复制 Eorzea Collection 幻化页面链接，在“Eorzea Collection”→“从链接导入”中选择
+“新建幻化板”或“试穿”。“批量导入”窗口会在复制新的有效链接时自动导入。
+国服英文名称通过插件内置的离线名称索引解析；下载 EC 搭配仍需联网。
 
 ---
 
-# Advanced search
+# 查找同模装备
 
-The plate search box can be used to search for more than just plate names. Try
-the options below.
+在装备名称或图标上单击鼠标中键（滚轮），或按住 Control 并单击鼠标左键，
+即可打开同模装备窗口。左键单击列表条目可发送装备链接到聊天，右键单击可试穿。
 
-- j:job can be used to search for a job by its abbreviation. Example: j:pld
+---
 
-- lvl:maxLevel can be used to search for plates equippable up to a specific
-level. Example: lvl:1
+# 高级搜索
 
-- t:tag can be used to search by tag.
+幻化板搜索框不仅支持名称，还支持以下原始前缀；前缀必须使用英文字符。
+多个条件可用空格分隔；包含空格的标签或装备名称可用英文双引号括起。
 
-- !t:tag can be used to exclude tags.
+- j:职业缩写：按可穿戴职业筛选，例如 j:pld（骑士）、j:war（战士）。
 
-- id:itemId can be used to search for plates with the given item ID.
+- lvl:最高等级：筛选所需穿戴等级不超过指定值的幻化板，例如 lvl:1。
 
-- i:itemName can be used to search for plates with the given item name. Example:
-i:skallic
+- t:标签：包含指定标签，例如 t:日常，或 t:"日常 搭配"。
+
+- !t:标签：排除指定标签，例如 !t:活动。
+
+- id:物品ID：包含指定物品 ID 的幻化板，例如 id:33988。
+
+- i:装备名称：包含名称匹配装备的幻化板，例如国服使用 i:学究，英文客户端使用 i:skallic。
+装备名称与染剂名称跟随客户端默认语言；插件界面与帮助固定显示中文。

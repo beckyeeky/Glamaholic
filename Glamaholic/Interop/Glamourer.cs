@@ -70,7 +70,7 @@ namespace Glamaholic.Interop {
             if (url.Length == 0 || !EorzeaCollection.IsEorzeaCollectionURL(url)) {
                 url = Util.GetClipboardText();
                 if (url.Length == 0 || !EorzeaCollection.IsEorzeaCollectionURL(url)) {
-                    Service.ChatGui.PrintError("[Glamaholic] No valid Eorzea Collection URL provided or found in clipboard");
+                    Service.ChatGui.PrintError("[Glamaholic] 命令参数和剪贴板中均未找到有效的 Eorzea Collection 链接。");
                     return;
                 }
             }
@@ -78,7 +78,7 @@ namespace Glamaholic.Interop {
             Task.Run(async () => {
                 var import = await EorzeaCollection.ImportFromURL(url);
                 if (import == null) {
-                    Service.ChatGui.PrintError("[Glamaholic] Failed to import glamour from Eorzea Collection URL, check /xllog for more information.");
+                    Service.ChatGui.PrintError("[Glamaholic] 从 Eorzea Collection 链接导入幻化失败，请通过 /xllog 查看详情。");
                     return;
                 }
 
@@ -117,7 +117,7 @@ namespace Glamaholic.Interop {
             if (Available) {
                 Service.CommandManager.AddHandler("/tryonglamourer", new CommandInfo(TryOnCommand) { 
                     ShowInHelp = true,
-                    HelpMessage = "Try on an EC glamour using Glamourer, link can be provided in the command or in the clipboard"
+                    HelpMessage = "通过 Glamourer 试穿 Eorzea Collection 幻化；链接可放在命令参数或剪贴板中。"
                 });
 
                 return;

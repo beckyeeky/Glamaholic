@@ -19,7 +19,7 @@ namespace Glamaholic {
 
     [Serializable]
     internal class FolderNode : TreeNode {
-        public override string Name { get; set; } = "Unnamed Folder";
+        public override string Name { get; set; } = "未命名文件夹";
 
         [JsonConverter(typeof(TreeNodeListConverter))]
         public List<TreeNode> Children { get; set; } = new();
@@ -28,7 +28,7 @@ namespace Glamaholic {
     [Serializable]
     internal class PlateNode : TreeNode {
         public override string Name {
-            get => Plate?.Name ?? "Unnamed Plate";
+            get => Plate?.Name ?? "未命名幻化板";
             set { Plate.Name = value; }
         }
 

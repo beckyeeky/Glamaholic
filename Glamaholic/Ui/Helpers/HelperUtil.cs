@@ -89,7 +89,7 @@ namespace Glamaholic.Ui.Helpers {
         internal static Guid? DrawFolderMenuItems(List<TreeNode> rootNodes) {
             var folders = TreeUtils.GetAllFolders(rootNodes);
 
-            if (ImGui.MenuItem("Root (No Folder)"))
+            if (ImGui.MenuItem("根目录（不使用文件夹）"))
                 return Guid.Empty;
 
             if (folders.Count > 0)
@@ -102,7 +102,7 @@ namespace Glamaholic.Ui.Helpers {
 
             if (folders.Count == 0) {
                 ImGui.Separator();
-                ImGui.TextDisabled("No folders created yet.");
+                ImGui.TextDisabled("尚未创建文件夹。");
             }
 
             return null;
@@ -112,7 +112,7 @@ namespace Glamaholic.Ui.Helpers {
             Guid? result = null;
             var folders = TreeUtils.GetAllFolders(rootNodes);
 
-            var preview = "Root (No Folder)";
+            var preview = "根目录（不使用文件夹）";
             if (currentSelection.HasValue && currentSelection.Value != Guid.Empty) {
                 foreach (var (id, path) in folders) {
                     if (id == currentSelection.Value) {
@@ -123,7 +123,7 @@ namespace Glamaholic.Ui.Helpers {
             }
 
             if (ImGui.BeginCombo(comboId, preview)) {
-                if (ImGui.Selectable("Root (No Folder)", !currentSelection.HasValue || currentSelection.Value == Guid.Empty))
+                if (ImGui.Selectable("根目录（不使用文件夹）", !currentSelection.HasValue || currentSelection.Value == Guid.Empty))
                     result = Guid.Empty;
 
                 foreach (var (id, path) in folders) {
@@ -142,7 +142,7 @@ namespace Glamaholic.Ui.Helpers {
         internal static bool DrawCreatePlateMenu(PluginUi ui, Func<Dictionary<PlateSlot, SavedGlamourItem>?> getter, ref string nameInput) {
             var ret = false;
 
-            if (!ImGui.BeginMenu("Create glamour plate")) {
+            if (!ImGui.BeginMenu("创建幻化板")) {
                 return ret;
             }
             
@@ -151,7 +151,7 @@ namespace Glamaholic.Ui.Helpers {
             if (folderChoice.HasValue)
                 _createPlateTargetFolder = folderChoice.Value;
 
-            const string msg = "Select a folder, enter a name and then press then <Enter> to create a new plate, or choose a plate below to overwrite.";
+            const string msg = "选择文件夹并输入名称，按 <Enter> 创建幻化板；也可选择下方已有幻化板进行覆盖。";
             ImGui.PushTextWrapPos(250);
             if (Util.DrawTextInput("current-name", ref nameInput, message: msg, flags: ImGuiInputTextFlags.AutoSelectAll)) {
                 var items = getter();
@@ -187,11 +187,11 @@ namespace Glamaholic.Ui.Helpers {
 
                             if (!ctrl && ImGui.IsItemHovered()) {
                                 ImGui.BeginTooltip();
-                                ImGui.TextUnformatted("Hold Control and click to overwrite.");
+                                ImGui.TextUnformatted("按住 Control 并单击以覆盖。");
                                 ImGui.EndTooltip();
                             }
                         } else if (node is FolderNode folder) {
-                            ImGui.TextUnformatted($"[Folder] {folder.Name}");
+                            ImGui.TextUnformatted($"[文件夹] {folder.Name}");
 
                             if (folder.Children.Count > 0) {
                                 DrawPlateNodes(folder.Children, depth + 1);
